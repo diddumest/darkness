@@ -9,6 +9,7 @@ import (
 	"github.com/thecsw/darkness/emilia/alpha"
 	"github.com/thecsw/darkness/export"
 	"github.com/thecsw/darkness/ichika/chiho"
+	kurisu "github.com/thecsw/darkness/ichika/kurisu"
 	"github.com/thecsw/darkness/parse"
 	"github.com/thecsw/darkness/yunyun"
 )
@@ -34,6 +35,9 @@ type Control struct {
 	OutputFilename string
 	// Output is the output file's contents.
 	Output io.Reader
+
+	// Optionally the cached instance of the Page
+	PageCache *kurisu.CacheManager
 }
 
 // Read reads the input file and returns the Control.
@@ -56,6 +60,12 @@ func (c *Control) Parse() Woof {
 func (c *Control) Export() Woof {
 	c.OutputFilename = c.Conf.Project.InputFilenameToOutput(c.InputFilename)
 	c.Output = c.Exporter.Do(chiho.EnrichPage(c.Conf, c.Page))
+	return c
+}
+
+// Writes page to the cache
+func (c *Control) Cache() Woof {
+	c.PageCache.MergePage(*c.Page)
 	return c
 }
 

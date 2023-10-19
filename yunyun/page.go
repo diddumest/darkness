@@ -2,6 +2,7 @@ package yunyun
 
 import (
 	"path/filepath"
+	"time"
 
 	"github.com/thecsw/gana"
 )
@@ -36,6 +37,20 @@ type Page struct {
 	// DateHoloscene tells us whether the first paragraph
 	// on the page is given as holoscene date stamp.
 	DateHoloscene bool
+	// Tracked changes determined by the delta in page cache
+	Changes []Change
+}
+
+// Represents explicit and implicit changes to single pages
+type Change struct {
+	// Optional provided reasoning set via orgmode statements/suggestion things
+	Reason string
+	// Date of compilation or static change information
+	Date time.Time
+}
+
+func (c Change) Compare(cc Change) int {
+	return c.Date.Compare(cc.Date)
 }
 
 // MetaTag is a struct for holding the meta tag.

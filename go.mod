@@ -24,7 +24,6 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/urfave/cli/v2 v2.25.7 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
-	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/term v0.12.0 // indirect
 )
@@ -36,6 +35,7 @@ require (
 	github.com/fogleman/gg v1.3.0
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/go-chi/chi/v5 v5.0.10
+	github.com/google/go-cmp v0.5.8
 	github.com/k0kubun/go-ansi v0.0.0-20180517002512-3bf9e2903213
 	github.com/karrick/godirwalk v1.17.0
 	github.com/pkg/profile v1.7.0
@@ -44,5 +44,6 @@ require (
 	github.com/thecsw/haruhi v0.4.0
 	github.com/thecsw/komi v0.1.2
 	github.com/thecsw/rei v0.0.3
+	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 	golang.org/x/image v0.12.0
 )

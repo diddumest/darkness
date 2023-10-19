@@ -10,6 +10,7 @@ import (
 	"github.com/thecsw/darkness/export"
 	"github.com/thecsw/darkness/ichika/akane"
 	"github.com/thecsw/darkness/ichika/hizuru"
+	"github.com/thecsw/darkness/ichika/kurisu"
 	"github.com/thecsw/darkness/ichika/makima"
 	"github.com/thecsw/darkness/parse"
 	"github.com/thecsw/darkness/yunyun"
@@ -32,6 +33,14 @@ func build(conf *alpha.DarknessConfig) {
 	parser := parse.BuildParser(conf)
 	exporter := export.BuildExporter(conf)
 
+	cacheManage := &kurisu.CacheManager{
+		Cache:     nil,
+		CacheFile: yunyun.FullPathFile("./cache.json"),
+	}
+	if err := cacheManage.Load(); err != nil {
+		puck.Logger.Error("Failed to load cache", "err", err, "config", cacheManage)
+	}
+
 	if !akaneless {
 		// Let's complete the akane requests when done building.
 		defer akane.Do(conf)
@@ -50,6 +59,12 @@ func build(conf *alpha.DarknessConfig) {
 	parserPool := komi.NewWithSettings(komi.Work(makima.Woof.Parse), &komi.Settings{
 		Name:     "Komi Parsing 🧹 ",
 		Laborers: customNumWorkers,
+		Debug:    debugEnabled,
+	})
+
+	cachePool := komi.NewWithSettings(komi.Work(makima.Woof.Cache), &komi.Settings{
+		Name:     "Komi Remembering 🧹 ",
+		Laborers: 1,
 		Debug:    debugEnabled,
 	})
 
@@ -85,7 +100,8 @@ func build(conf *alpha.DarknessConfig) {
 	//           Writing 🎸                     Exporting 🥂
 	//
 	rei.Try(filesPool.Connect(parserPool))
-	rei.Try(parserPool.Connect(exporterPool))
+	rei.Try(parserPool.Connect(cachePool))
+	rei.Try(cachePool.Connect(exporterPool))
 	rei.Try(exporterPool.Connect(writerPool))
 
 	// Record the start time.
@@ -103,11 +119,16 @@ func build(conf *alpha.DarknessConfig) {
 			Parser:        parser,
 			Exporter:      exporter,
 			InputFilename: inputFilename,
+			PageCache:     cacheManage,
 		}))
 	}
 
 	// Wait for all the pools to finish.
 	writerPool.Close()
+
+	if err := cacheManage.Save(); err != nil {
+		puck.Logger.Error("Failed to save cache", "err", err, "config", cacheManage)
+	}
 
 	// Record the time it took to finish.
 	finish := time.Now()
