@@ -42,4 +42,5 @@ func main() {
 	// or show a snarky error message
 	fmt.Println("command not found?")
 	fmt.Println("see help, you pathetic excuse of a man")
+
 }

@@ -1,4 +1,4 @@
-# I love Darkness 🥬
+  # I love Darkness 🥬
 
 ![darkness](./darkness.png)
 
@@ -65,7 +65,7 @@ Benchmark 1: darkness build
 
 ## How to get it
 
-It's simple! If you have go1.18 installed, you can install it through `go` tool with
+It's simple! If you have go1.21 installed, you can install it through `go` tool with
 
 ```sh
 git clone https://github.com/thecsw/darkness

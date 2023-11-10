@@ -196,9 +196,9 @@ func AsymmetricEmphasis(left, right string) *regexp.Regexp {
 // emphasisPattern returns pattern given left and right delimeters.
 func emphasisPattern(left, right string) string {
 	return `(?mU)` +
-		`(?P<l>[[:space:]]|` + darknessPunctLeft + `|^)` +
-		`(?:` + left + `)` +
+		`(?P<l>[[:space:]]|(?:[()\[\]_%“”—–-]|[>])|^)` +
+		`(?:/)` +
 		`(?P<text>\S|\S\S|\S.+\S)` +
-		`(?:` + right + `)` +
+		`(?:/)` +
 		`(?P<r>[[:space:]]|` + darknessPunctRight + `|$)`
 }
